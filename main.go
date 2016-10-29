@@ -30,7 +30,7 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
       http.Error(w, err.Error(), http.StatusInternalServerError)
       return
     }
-    http.Redirect(w, r, "/"+list[0].Url, http.StatusFound)
+    http.Redirect(w, r, path + "/"+list[0].Url, http.StatusFound)
     return
   }
   m:=validPostPath.FindStringSubmatch(r.URL.Path)
