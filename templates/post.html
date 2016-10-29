@@ -1,0 +1,34 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="description" content="mrkvon homepage" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{.Title}} :: blog :: mrkvon</title>
+
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/" />
+    <meta property="og:title" content="mrkvon blog" />
+    <meta property="og:description" content="blog: freedom, sharing, coding, music" />
+
+    <link rel="stylesheet" type="text/css" href="/css/reset.css" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css" />
+  </head>
+  <body>
+    <div id="wrapper">
+      {{template "menu" .}}
+      <div id="page">
+      <section>
+        {{.Body}}
+      </section>
+      <nav>
+        {{if .Prev}}
+        <a href="{{.Path}}/{{.Prev}}">&lt Previous</a>
+        {{end}}
+        {{if .Next}}
+        <a href="{{.Path}}/{{.Next}}">Next &gt</a>
+        {{end}}
+        <a href="{{.Path}}/archive">List</a>
+      </nav>
+    </div>
+  </body>
+</html>

@@ -2,16 +2,23 @@ package main
 
 import (
   "net/http"
-  "fmt"
+  //"fmt"
   "os"
   "io/ioutil"
   "regexp"
   "encoding/json"
+  "html/template"
+  "github.com/russross/blackfriday"
+  //"bytes"
 )
 
 var validArchivePath = regexp.MustCompile("^/archive/?$")
 var validHomePath = regexp.MustCompile("^/?$")
 var validPostPath = regexp.MustCompile("^/([a-z0-9-]+)/?$")
+
+
+// var templates = template.Must(template.ParseFiles("templates/menu.html"))
+
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
   // read the json list of posts
@@ -55,7 +62,42 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
       http.Error(w, err.Error(), http.StatusInternalServerError)
       return
     }
-    fmt.Fprint(w, content)
+    ////
+    type Post struct {
+      Body template.HTML
+      Title string
+      Path string
+      Prev string
+      Next string
+    }
+
+    var prev string
+    var next string
+    var path string // TODO
+
+    if index > 0 {
+      next=list[index-1].Url
+    }
+
+    if index < len(list)-1 {
+      prev=list[index+1].Url
+    }
+
+    tmpl := template.Must(template.New("post.html").ParseFiles("templates/post.html", "templates/menu.html"))
+
+    p:=Post{
+      Body: template.HTML(content),
+      Title: list[index].Title,
+      Path: path,
+      Prev: prev,
+      Next: next,
+    }
+    err2 := tmpl.ExecuteTemplate(w, "post.html", p)
+
+    if err2 != nil {
+      http.Error(w, err2.Error(), http.StatusInternalServerError)
+    }
+    ////
     return
   }
 
@@ -73,14 +115,24 @@ func archiveHandler(w http.ResponseWriter, r *http.Request) {
     http.Error(w, err.Error(), http.StatusInternalServerError)
     return
   }
-  fmt.Fprintf(w, "<ul>\n")
-  for _, item := range list {
-    fmt.Fprintf(w, "<li><a href=\"/%s\">%s</a></li>\n", item.Url, item.Title)
+  ////
+  type Page struct {
+    PostList []*PostItem
   }
-  fmt.Fprintf(w, "</ul>")
+
+  tmpl := template.Must(template.New("archive.html").ParseFiles("templates/archive.html", "templates/menu.html"))
+
+  p:=Page{PostList: list}
+  err2 := tmpl.ExecuteTemplate(w, "archive.html", p)
+
+  if err2 != nil {
+    http.Error(w, err2.Error(), http.StatusInternalServerError)
+  }
+  ////
 }
 
 func main() {
+  http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("./css"))))
   http.HandleFunc("/archive", archiveHandler)
   http.HandleFunc("/archive/", archiveHandler)
   http.HandleFunc("/", homeHandler)
@@ -97,6 +149,11 @@ type PostItem struct {
 // function to load the json list of posts
 func loadList() ([]*PostItem, error) {
   posts, err := os.Open("posts.json")
+  defer func() {
+    if err := posts.Close(); err != nil {
+      panic(err)
+    }
+  }()
   if err != nil {
     return nil, err
   }
@@ -111,6 +168,43 @@ func loadPost(url string) (string, error) {
   if err != nil {
     return "", err
   }
-  return string(rawContent), nil
+  content:=blackfriday.MarkdownCommon(rawContent)
+  return string(content), nil
 }
 
+/*
+type Page struct {
+  Content template.HTML //Content string
+}
+
+func main() {
+  s := "<p>Hello!</p>"
+
+  t, err := template.New("foo").Parse(`before {{.Content}} after`)
+
+  var buf bytes.Buffer
+
+  err = t.ExecuteTemplate(&buf, "foo", Page{Content: template.HTML(s)})
+    //err = t.ExecuteTemplate(&buf, "foo", Page{Content: s})
+
+  if err != nil {
+    fmt.Println("template error:", err)
+  }
+
+  fmt.Println(string(buf.Bytes()))
+}
+func markDowner(args ...interface{}) template.HTML {
+  s := blackfriday.MarkdownCommon([]byte(fmt.Sprintf("%s", args...)))
+  return template.HTML(s)
+}
+
+tmpl := template.Must(template.New("page.html").Funcs(template.FuncMap{"markDown": markDowner}).ParseFiles("page.html"))
+
+err := tmpl.ExecuteTemplate(w, "page.html", p)
+
+if err != nil {
+  http.Error(w, err.Error(), http.StatusInternalServerError)
+}
+
+{{.Body | markDown}}
+*/

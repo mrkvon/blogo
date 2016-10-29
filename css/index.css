@@ -1,0 +1,176 @@
+html
+{
+  overflow: -moz-scrollbars-vertical; 
+  overflow-y: scroll;
+}
+
+body{
+  /*font-family:"Palatino Linotype", "Book Antiqua", Palatino, serif;*/
+  font-family:georgia,serif;
+  font-size:1.2em;
+  background-color:#81c0c5;
+}
+
+#wrapper{
+  position:relative;
+  width:600px;
+  margin: 60px auto 10px auto;
+}
+
+#menu ul li{
+  display:inline-block;
+  margin-right:10px;
+  color:white;
+  font-size:1.5em;
+  list-style-type:none;
+}
+
+#menu a:hover, #menu .active{
+  background-color:white;
+  color:#389090;
+  !important;
+}
+#menu a{
+  color:white;
+}
+
+#menu {
+  z-index:5;
+}
+
+#page{
+  position:relative;
+  background-color:white;
+  padding:30px;
+}
+
+#twitter{
+  position:relative;
+}
+
+#twitter_img{
+  height:30;
+  width:30;
+}
+
+#rss{
+  position:absolute;
+  top:10px;
+  right:10px;
+}
+
+#rss a:hover{
+  background-color:white !important;
+}
+
+div{
+  position:relative;
+}
+
+h1{
+  font-family:georgia,serif;
+  font-size:1.5em;
+  padding-top:10px;
+  padding-bottom:10px;
+  font-weight:bold;
+  color:#389090;
+}
+
+h2{
+  font-weight:bold;
+  margin-top:1em;
+  margin-bottom:1em;
+}
+
+p{
+  margin-bottom:1em;
+  clear:left;
+}
+
+a{
+  text-decoration:none;
+  color:#389090;
+}
+a:hover{
+  text-decoration:none;
+  background-color:#81c0c5;
+  color:#fff;
+  /*border-radius:5px;*/
+}
+
+#page ul{
+  list-style-type:circle;
+  padding-left:20px;
+  margin-top:1em;
+  margin-bottom:1em;
+}
+#page ul li{
+  list-style-type:circle;
+  padding-bottom: 0.5em;
+}
+
+.post{
+  color:#389090;
+  font-weight:bold;
+}
+
+hr{
+  color:#81c0c5;
+  background-color:#81c0c5;
+  height:5px;
+  border:0;
+}
+
+img.left{
+  float:left;
+  margin-right:10px;
+  margin-bottom:10px;
+}
+
+table{
+  border:1px solid black;
+  width:100%;
+  margin-top:10px;
+  margin-bottom:10px;
+}
+
+table td, table th{
+  padding:5px;
+  border:1px solid black;
+  max-width:60px;
+  overflow:hidden;
+  background-color:white;
+}
+
+table tr{
+  line-height:1em;
+}
+
+#map{
+  height:200px;
+  width:100%;
+}
+
+.bold_type{
+  font-weight:bold;
+}
+
+@media screen and (max-width: 599px) {
+  #wrapper{
+    width:100%;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  #wrapper{
+    width:320px;
+  }
+}
+
+.center {
+  text-align:center;
+}
+
+#main-text {
+  margin-bottom:40px;
+}
