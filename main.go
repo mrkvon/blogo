@@ -73,7 +73,6 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 
     var prev string
     var next string
-    var path string // TODO
 
     if index > 0 {
       next=list[index-1].Url
@@ -118,11 +117,12 @@ func archiveHandler(w http.ResponseWriter, r *http.Request) {
   ////
   type Page struct {
     PostList []*PostItem
+    Path string
   }
 
   tmpl := template.Must(template.New("archive.html").ParseFiles("templates/archive.html", "templates/menu.html"))
 
-  p:=Page{PostList: list}
+  p:=Page{PostList: list, Path: path}
   err2 := tmpl.ExecuteTemplate(w, "archive.html", p)
 
   if err2 != nil {

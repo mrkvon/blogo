@@ -20,8 +20,9 @@
       <section>
         <h1>List of Posts</h1>
         <ul>
+          {{$path:=.Path}}
           {{range .PostList}}
-          <li>{{.Date}} <a href="/{{.Url}}">{{.Title}}</a></li>
+          <li>{{.Date}} <a href="{{$path}}/{{.Url}}">{{.Title}}</a></li>
           {{end}}
         </ul>
       </section>
